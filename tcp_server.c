@@ -131,8 +131,11 @@ int main(int argc, char *argv[])
         // Modify Temperature 
 	float sum = temperature[0] + temperature[1] + temperature[2] + temperature[3];
         float updatedTemp = (2 * centralTemp + sum) / 6.0;
-        updatedTemp += updatedTemp;  
 
+        if (fabs(updatedTemp - centralTemp) < EPS) {
+		stable = true;
+	} else {
+		centralTemp = updatedTemp;
 
         // Construct message with updated temperature
         struct msg updated_msg; 
