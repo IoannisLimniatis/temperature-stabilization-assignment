@@ -7,10 +7,12 @@
 #include <arpa/inet.h>
 #include <stdbool.h>
 #include "utils.h"
+#include <math.h>
+
 
 
 #define numExternals 4     // Number of external processes 
-
+#define EPS 1e-3
 
 int * establishConnectionsFromExternalProcesses()
 {
@@ -89,8 +91,10 @@ int * establishConnectionsFromExternalProcesses()
 
 
 
-int main(void)
+int main(int argc, char *argv[])
 {
+
+    float centralTemp = atof(argv[1]);
     int socket_desc; 
    // unsigned int client_size;
    // struct sockaddr_in server_addr, client_addr;
@@ -102,7 +106,6 @@ int main(void)
     // Establish client connections and return 
     // an array of file descriptors of client sockets. 
     int * client_socket = establishConnectionsFromExternalProcesses(); 
-
 
 
     int stable = false;
@@ -126,8 +129,9 @@ int main(void)
         }
 
         // Modify Temperature 
-        float updatedTemp = temperature[0] + temperature[1] + temperature[2] + temperature[3];
-        updatedTemp += updatedTemp / 4.0;  
+	float sum = temperature[0] + temperature[1] + temperature[2] + temperature[3];
+        float updatedTemp = (2 * centralTemp + sum) / 6.0;
+        updatedTemp += updatedTemp;  
 
 
         // Construct message with updated temperature
@@ -160,3 +164,4 @@ int main(void)
     
     return 0;
 }
+
