@@ -141,7 +141,7 @@ int main(int argc, char *argv[])
         struct msg updated_msg; 
         updated_msg.T = updatedTemp;
         updated_msg.Index = 0;                // Index of central server 
-
+	updated_msg.done = stable ? 1 : 0;
 
         // Send updated temperatures to the 4 external processes 
         for (int i = 0;  i < numExternals; i++){

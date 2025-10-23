@@ -49,17 +49,18 @@ int main (int argc, char *argv[])
     the_message = prepare_message(externalIndex, initialTemperature); 
 
     // Send the message to server:
-    if(send(socket_desc, (const void *)&the_message, sizeof(the_message), 0) < 0){
-        printf("Unable to send message\n");
-        return -1;
-    }
- 
+    while (1) {
+	send(socket_desc, (const void *)$the_message, sizeof(the_message), 0);
+	recv(socket_desc, (void *)&the_message, sizeof(the_message), 0);
 
-    // Receive the server's response:
-    if(recv(socket_desc, (void *)&the_message, sizeof(the_message), 0) < 0){
-        printf("Error while receiving server's msg\n");
-        return -1;
-    }
+	if (the_message.done == 1) {
+	     break
+	}
+
+	initialTemperature = (3 * initialTemperature + 2 * the_message.T) / 5.0;
+        the_message = prepare_message(externalIndex, initialTemperature);
+   }
+
     
     printf("--------------------------------------------------------\n");
     printf("Updated temperature sent by the Central process = %f\n", the_message.T);
