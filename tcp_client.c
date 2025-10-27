@@ -50,11 +50,11 @@ int main (int argc, char *argv[])
 
     // Send the message to server:
     while (1) {
-	send(socket_desc, (const void *)$the_message, sizeof(the_message), 0);
+	send(socket_desc, (const void *)&the_message, sizeof(the_message), 0);
 	recv(socket_desc, (void *)&the_message, sizeof(the_message), 0);
 
 	if (the_message.done == 1) {
-	     break
+	     break;
 	}
 
 	initialTemperature = (3 * initialTemperature + 2 * the_message.T) / 5.0;

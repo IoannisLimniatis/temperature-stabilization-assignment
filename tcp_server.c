@@ -154,17 +154,18 @@ int main(int argc, char *argv[])
         printf("\n");
 
         // Check stability condition 
-        if (updatedTemp == 0)
+        if (updatedTemp == 0) {
             stable = true; 
+     	}
 
     }
- 
+
     // Closing all sockets
     for (int i = 0; i < numExternals; i++)
         close(client_socket[i]);
 
     close(socket_desc);
-    
+
     return 0;
 }
 
