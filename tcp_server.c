@@ -92,6 +92,7 @@ int * establishConnectionsFromExternalProcesses()
 
 
 int main(int argc, char *argv[])
+
 {
 
     float centralTemp = atof(argv[1]);
@@ -109,7 +110,7 @@ int main(int argc, char *argv[])
 
 
     int stable = false;
-    while ( !stable ){
+    while (!stable) {
 
         // Array that stores temperatures from clients 
         float temperature[numExternals];
@@ -129,34 +130,34 @@ int main(int argc, char *argv[])
         }
 
         // Modify Temperature 
-	float sum = temperature[0] + temperature[1] + temperature[2] + temperature[3];
+	    float sum = temperature[0] + temperature[1] + temperature[2] + temperature[3];
         float updatedTemp = (2 * centralTemp + sum) / 6.0;
 
-        if (fabs(updatedTemp - centralTemp) < EPS) {
+    if (fabs(updatedTemp - centralTemp) < EPS) 
 		stable = true;
-	} else {
-		centralTemp = updatedTemp;
 
-        // Construct message with updated temperature
-        struct msg updated_msg; 
-        updated_msg.T = updatedTemp;
-        updated_msg.Index = 0;                // Index of central server 
+	centralTemp = updatedTemp;
+
+    // Construct message with updated temperature
+    struct msg updated_msg; 
+    updated_msg.T = updatedTemp;
+    updated_msg.Index = 0;               // Index of central server 
 	updated_msg.done = stable ? 1 : 0;
 
-        // Send updated temperatures to the 4 external processes 
-        for (int i = 0;  i < numExternals; i++){
-            if (send(client_socket[i], (const void *)&updated_msg, sizeof(updated_msg), 0) < 0){
-                printf("Can't send\n");
-                return -1;
-            }
-        }        
+    // Send updated temperatures to the 4 external processes 
+    for (int i = 0;  i < numExternals; i++){
+        if (send(client_socket[i], (const void *)&updated_msg, sizeof(updated_msg), 0) < 0){
+            printf("Can't send\n");
+            return -1;
+        }
+    }        
 
-        printf("\n");
+    printf("Updated Central Temperature = %f\n", updatedTemp);
 
         // Check stability condition 
-        if (updatedTemp == 0) {
-            stable = true; 
-     	}
+    if (updatedTemp == 0) {
+        stable = true; 
+        }
 
     }
 
@@ -167,5 +168,6 @@ int main(int argc, char *argv[])
     close(socket_desc);
 
     return 0;
+
 }
 
